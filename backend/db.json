@@ -1,0 +1,588 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "john@zaio.io",
+      "password": "$2a$10$Lw04Ja.jbk0S.mXj8VMQvO//S.OIP8KoZjpLQJ5dlQ5WjIHCJfYnG",
+      "firstName": "John",
+      "lastName": "Doe",
+      "phoneNumber": "+1234567890",
+      "dateOfBirth": "1990-05-15",
+      "profilePicture": "https://via.placeholder.com/150",
+      "isVerified": true,
+      "dateJoined": "2023-01-15",
+      "preferences": {
+        "language": "English",
+        "currency": "USD",
+        "notifications": {
+          "email": true,
+          "sms": false,
+          "push": true
+        }
+      },
+      "address": {
+        "street": "123 Main St",
+        "city": "New York",
+        "state": "NY",
+        "zipCode": "10001",
+        "country": "USA"
+      }
+    },
+    {
+      "id": 2,
+      "email": "george@zaio.io",
+      "password": "$2a$10$Bx6R2/ctp/XkIjtnNyQuwOinacHqP/VGQ1PDb.fMibHKj4uF4UW6O",
+      "firstName": "George",
+      "lastName": "Smith",
+      "phoneNumber": "+1987654321",
+      "dateOfBirth": "1985-08-22",
+      "profilePicture": "https://via.placeholder.com/150",
+      "isVerified": true,
+      "dateJoined": "2023-03-20",
+      "preferences": {
+        "language": "English",
+        "currency": "USD",
+        "notifications": {
+          "email": true,
+          "sms": true,
+          "push": false
+        }
+      },
+      "address": {
+        "street": "456 Oak Ave",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zipCode": "90210",
+        "country": "USA"
+      }
+    }
+  ],
+  "listings": [
+    {
+      "listingId": 1,
+      "title": "Cozy Mountain Cabin with Stunning Views",
+      "description": "Beautiful 3-bedroom cabin nestled in the mountains with panoramic views and modern amenities.",
+      "hostId": 1,
+      "hostEmail": "host1@hosts.com",
+      "address": {
+        "street": "Mountain View Drive",
+        "city": "Chiang Mai",
+        "state": "Chiang Mai Province",
+        "zipCode": "50121",
+        "country": "Thailand",
+        "latitude": 18.7883,
+        "longitude": 98.9853
+      },
+      "propertyDetails": {
+        "bedNum": 3,
+      "bathNum": 2,
+        "sqFt": 1200,
+        "maxGuests": 6,
+        "bedrooms": [
+          {
+            "type": "Master",
+            "beds": 1,
+            "bedType": "King"
+          },
+          {
+            "type": "Guest",
+            "beds": 2,
+            "bedType": "Queen"
+          }
+        ],
+        "propertyType": "Cabin",
+        "roomType": "Entire place"
+      },
+      "amenities": [
+        "WiFi",
+        "Kitchen",
+        "Free parking",
+        "Air conditioning",
+        "Heating",
+        "Washer",
+        "Dryer",
+        "TV",
+        "Pool",
+        "Hot tub"
+      ],
+      "images": [
+        "https://via.placeholder.com/800x600",
+        "https://via.placeholder.com/800x600",
+        "https://via.placeholder.com/800x600"
+      ],
+      "pricing": {
+        "basePrice": 500,
+        "currency": "USD",
+        "cleaningFee": 50,
+        "serviceFee": 25,
+        "securityDeposit": 200,
+        "extraGuestFee": 25
+      },
+      "availability": {
+        "isAvailable": true,
+        "minimumStay": 2,
+        "maximumStay": 30,
+        "checkInTime": "15:00",
+        "checkOutTime": "11:00"
+      },
+      "ratings": {
+        "averageRating": 4.8,
+        "totalReviews": 45,
+        "accuracy": 4.9,
+        "cleanliness": 4.8,
+        "communication": 4.7,
+        "location": 4.9,
+        "value": 4.6
+      },
+      "houseRules": [
+        "No smoking",
+        "No pets",
+        "No parties or events",
+        "Quiet hours 10 PM - 8 AM"
+      ],
+      "cancellationPolicy": "Flexible",
+      "dateCreated": "2023-01-10",
+      "lastUpdated": "2024-01-15"
+    },
+    {
+      "listingId": 2,
+      "title": "Modern Downtown Apartment",
+      "description": "Stylish 2-bedroom apartment in the heart of the city with easy access to restaurants and attractions.",
+      "hostId": 1,
+      "hostEmail": "host1@hosts.com",
+      "address": {
+        "street": "Downtown Plaza",
+      "city": "Chiang Mai",
+        "state": "Chiang Mai Province",
+        "zipCode": "50121",
+        "country": "Thailand",
+        "latitude": 18.7883,
+        "longitude": 98.9853
+      },
+      "propertyDetails": {
+        "bedNum": 2,
+        "bathNum": 1,
+        "sqFt": 800,
+        "maxGuests": 4,
+        "bedrooms": [
+          {
+            "type": "Master",
+            "beds": 1,
+            "bedType": "Queen"
+          },
+          {
+            "type": "Guest",
+            "beds": 1,
+            "bedType": "Twin"
+          }
+        ],
+        "propertyType": "Apartment",
+        "roomType": "Entire place"
+      },
+      "amenities": [
+        "WiFi",
+        "Kitchen",
+        "Air conditioning",
+        "TV",
+        "Gym access",
+        "Doorman",
+        "Elevator"
+      ],
+      "images": [
+        "https://via.placeholder.com/800x600",
+        "https://via.placeholder.com/800x600"
+      ],
+      "pricing": {
+        "basePrice": 350,
+        "currency": "USD",
+        "cleaningFee": 30,
+        "serviceFee": 20,
+        "securityDeposit": 150,
+        "extraGuestFee": 15
+      },
+      "availability": {
+        "isAvailable": true,
+        "minimumStay": 1,
+        "maximumStay": 14,
+        "checkInTime": "16:00",
+        "checkOutTime": "10:00"
+      },
+      "ratings": {
+        "averageRating": 4.6,
+        "totalReviews": 32,
+        "accuracy": 4.7,
+        "cleanliness": 4.5,
+        "communication": 4.6,
+        "location": 4.8,
+        "value": 4.4
+      },
+      "houseRules": [
+        "No smoking",
+        "No pets",
+        "No parties",
+        "Respect neighbors"
+      ],
+      "cancellationPolicy": "Moderate",
+      "dateCreated": "2023-02-15",
+      "lastUpdated": "2024-01-10"
+    },
+    {
+      "listingId": 3,
+      "title": "Skyline Apartment in New York",
+      "description": "Entire apartment with stunning city views, modern amenities, and close to major attractions.",
+      "hostId": 2,
+      "hostEmail": "nyhost@hosts.com",
+      "address": {
+        "street": "Liberty St",
+        "city": "New York",
+        "state": "NY",
+        "zipCode": "10006",
+        "country": "USA",
+        "latitude": 40.7128,
+        "longitude": -74.0060
+      },
+      "propertyDetails": {
+        "bedNum": 2,
+        "bathNum": 2,
+        "sqFt": 950,
+        "maxGuests": 4,
+        "bedrooms": [
+          { "type": "Master", "beds": 1, "bedType": "King" },
+          { "type": "Guest", "beds": 1, "bedType": "Queen" }
+        ],
+        "propertyType": "Apartment",
+        "roomType": "Entire apartment"
+      },
+      "amenities": ["WiFi", "Kitchen", "Free parking"],
+      "images": [
+        "https://images.unsplash.com/photo-1549921296-a01050bfc8c5?auto=format&fit=crop&w=400&q=80"
+      ],
+      "pricing": {
+        "basePrice": 320,
+        "currency": "USD",
+        "cleaningFee": 40,
+        "serviceFee": 20,
+        "securityDeposit": 100,
+        "extraGuestFee": 20
+      },
+      "availability": {
+        "isAvailable": true,
+        "minimumStay": 1,
+        "maximumStay": 30,
+        "checkInTime": "15:00",
+        "checkOutTime": "11:00"
+      },
+      "ratings": {
+        "averageRating": 4.5,
+        "totalReviews": 320,
+        "accuracy": 4.6,
+        "cleanliness": 4.5,
+        "communication": 4.4,
+        "location": 4.7,
+        "value": 4.3
+      },
+      "houseRules": ["No smoking", "No pets"],
+      "cancellationPolicy": "Flexible",
+      "dateCreated": "2024-04-01",
+      "lastUpdated": "2024-04-01"
+    },
+    {
+      "listingId": 4,
+      "title": "Eiffel Home in Paris",
+      "description": "Entire home with a view of the Eiffel Tower, spacious and perfect for families.",
+      "hostId": 3,
+      "hostEmail": "parishost@hosts.com",
+      "address": {
+        "street": "Champs-Élysées",
+        "city": "Paris",
+        "state": "Île-de-France",
+        "zipCode": "75008",
+        "country": "France",
+        "latitude": 48.8566,
+        "longitude": 2.3522
+      },
+      "propertyDetails": {
+        "bedNum": 3,
+        "bathNum": 3,
+        "sqFt": 1400,
+        "maxGuests": 6,
+        "bedrooms": [
+          { "type": "Master", "beds": 1, "bedType": "King" },
+          { "type": "Guest", "beds": 2, "bedType": "Queen" }
+        ],
+        "propertyType": "Home",
+        "roomType": "Entire home"
+      },
+      "amenities": ["WiFi", "Kitchen", "Free parking"],
+      "images": [
+        "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=400&q=80"
+      ],
+      "pricing": {
+        "basePrice": 400,
+        "currency": "USD",
+        "cleaningFee": 50,
+        "serviceFee": 25,
+        "securityDeposit": 150,
+        "extraGuestFee": 30
+      },
+      "availability": {
+        "isAvailable": true,
+        "minimumStay": 2,
+        "maximumStay": 20,
+        "checkInTime": "14:00",
+        "checkOutTime": "11:00"
+      },
+      "ratings": {
+        "averageRating": 4.7,
+        "totalReviews": 250,
+        "accuracy": 4.8,
+        "cleanliness": 4.7,
+        "communication": 4.6,
+        "location": 4.9,
+        "value": 4.5
+      },
+      "houseRules": ["No smoking", "No parties"],
+      "cancellationPolicy": "Moderate",
+      "dateCreated": "2024-04-01",
+      "lastUpdated": "2024-04-01"
+    },
+    {
+      "listingId": 5,
+      "title": "Tokyo Private Room",
+      "description": "Cozy private room in the heart of Tokyo, ideal for solo travelers or couples.",
+      "hostId": 4,
+      "hostEmail": "tokyohost@hosts.com",
+      "address": {
+        "street": "Shibuya Crossing",
+        "city": "Tokyo",
+        "state": "Tokyo Prefecture",
+        "zipCode": "150-0002",
+        "country": "Japan",
+        "latitude": 35.6895,
+        "longitude": 139.6917
+      },
+      "propertyDetails": {
+        "bedNum": 1,
+        "bathNum": 1,
+        "sqFt": 400,
+        "maxGuests": 2,
+        "bedrooms": [
+          { "type": "Private", "beds": 1, "bedType": "Double" }
+        ],
+        "propertyType": "Room",
+        "roomType": "Private room"
+      },
+      "amenities": ["WiFi", "Kitchen"],
+      "images": [
+        "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80"
+      ],
+      "pricing": {
+        "basePrice": 150,
+        "currency": "USD",
+        "cleaningFee": 20,
+        "serviceFee": 10,
+        "securityDeposit": 50,
+        "extraGuestFee": 10
+      },
+      "availability": {
+        "isAvailable": true,
+        "minimumStay": 1,
+        "maximumStay": 10,
+        "checkInTime": "13:00",
+        "checkOutTime": "10:00"
+      },
+      "ratings": {
+        "averageRating": 4.2,
+        "totalReviews": 180,
+        "accuracy": 4.3,
+        "cleanliness": 4.2,
+        "communication": 4.1,
+        "location": 4.5,
+        "value": 4.0
+      },
+      "houseRules": ["No smoking", "No pets"],
+      "cancellationPolicy": "Flexible",
+      "dateCreated": "2024-04-01",
+      "lastUpdated": "2024-04-01"
+    },
+    {
+      "listingId": 100,
+      "title": "Modern Apartment in New York",
+      "description": "A beautiful apartment in the heart of NYC.",
+      "hostId": 1,
+      "hostEmail": "host1@hosts.com",
+      "address": {
+        "street": "Liberty St",
+        "city": "New York",
+        "state": "NY",
+        "zipCode": "10006",
+        "country": "USA",
+        "latitude": 40.7128,
+        "longitude": -74.0060
+      },
+      "propertyDetails": {
+        "bedNum": 2,
+        "bathNum": 2,
+        "sqFt": 950,
+        "maxGuests": 4,
+        "bedrooms": [
+          { "type": "Master", "beds": 1, "bedType": "King" },
+          { "type": "Guest", "beds": 1, "bedType": "Queen" }
+        ],
+        "propertyType": "Apartment",
+        "roomType": "Entire apartment"
+      },
+      "amenities": ["WiFi", "Kitchen", "Free parking"],
+      "images": [
+        "https://images.unsplash.com/photo-1549921296-a01050bfc8c5?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=800&q=80"
+      ],
+      "pricing": {
+        "basePrice": 320,
+        "currency": "USD",
+        "cleaningFee": 40,
+        "serviceFee": 20,
+        "securityDeposit": 100,
+        "extraGuestFee": 20
+      },
+      "availability": {
+        "isAvailable": true,
+        "minimumStay": 1,
+        "maximumStay": 30,
+        "checkInTime": "15:00",
+        "checkOutTime": "11:00"
+      },
+      "ratings": {
+        "averageRating": 4.5,
+        "totalReviews": 320,
+        "accuracy": 4.6,
+        "cleanliness": 4.5,
+        "communication": 4.4,
+        "location": 4.7,
+        "value": 4.3
+      },
+      "houseRules": ["No smoking", "No pets"],
+      "cancellationPolicy": "Flexible",
+      "dateCreated": "2024-04-01",
+      "lastUpdated": "2024-04-01"
+    }
+  ],
+  "hosts": [
+    {
+      "hostId": 1,
+      "hostName": "Mark Johnson",
+      "hostEmail": "mark@hosts.com",
+      "hostNumber": "0712323232",
+      "profilePicture": "https://via.placeholder.com/150",
+      "dateJoined": "2022-06-15",
+      "isVerified": true,
+      "isSuperhost": true,
+      "responseRate": 98,
+      "responseTime": "1 hour",
+      "totalListings": 2,
+      "totalReviews": 77,
+      "averageRating": 4.8,
+      "languages": ["English", "Thai"],
+      "address": {
+        "street": "Host Street",
+        "city": "Chiang Mai",
+        "state": "Chiang Mai Province",
+        "zipCode": "50121",
+        "country": "Thailand"
+      },
+      "verification": {
+        "email": true,
+        "phone": true,
+        "identity": true,
+        "governmentId": true
+      },
+      "hostingSince": "2022-06-15"
+    }
+  ],
+  "bookings": [
+    {
+      "bookingId": 1,
+      "userId": 1,
+      "listingId": 1,
+      "hostId": 1,
+      "destination": "Chiang Mai, Thailand",
+      "checkIn": "2024-02-15",
+      "checkOut": "2024-02-20",
+      "numberOfGuests": 4,
+      "totalPrice": 2750,
+      "currency": "USD",
+      "status": "confirmed",
+      "bookingDate": "2024-01-10",
+      "specialRequests": "Early check-in if possible",
+      "cancellationReason": null,
+      "reviewSubmitted": false,
+      "paymentStatus": "paid",
+      "guestDetails": {
+        "adults": 2,
+        "children": 2,
+        "infants": 0
+      },
+      "contactInfo": {
+        "phone": "+1234567890",
+        "email": "john@zaio.io"
+      }
+    },
+    {
+      "bookingId": 2,
+      "userId": 2,
+      "listingId": 2,
+      "hostId": 1,
+      "destination": "Chiang Mai, Thailand",
+      "checkIn": "2024-03-01",
+      "checkOut": "2024-03-05",
+      "numberOfGuests": 2,
+      "totalPrice": 1600,
+      "currency": "USD",
+      "status": "pending",
+      "bookingDate": "2024-01-12",
+      "specialRequests": null,
+      "cancellationReason": null,
+      "reviewSubmitted": false,
+      "paymentStatus": "pending",
+      "guestDetails": {
+        "adults": 2,
+        "children": 0,
+        "infants": 0
+      },
+      "contactInfo": {
+        "phone": "+1987654321",
+        "email": "george@zaio.io"
+      }
+    },
+    {
+      "bookingId": 3,
+      "userId": 1,
+      "listingId": 2,
+      "hostId": 1,
+      "destination": "Chiang Mai, Thailand",
+      "checkIn": "2024-01-20",
+      "checkOut": "2024-01-25",
+      "numberOfGuests": 3,
+      "totalPrice": 1925,
+      "currency": "USD",
+      "status": "completed",
+      "bookingDate": "2024-01-05",
+      "specialRequests": "Late check-out requested",
+      "cancellationReason": null,
+      "reviewSubmitted": true,
+      "paymentStatus": "paid",
+      "guestDetails": {
+        "adults": 2,
+        "children": 1,
+        "infants": 0
+      },
+      "contactInfo": {
+        "phone": "+1234567890",
+        "email": "john@zaio.io"
+      }
+    }
+  ]
+}

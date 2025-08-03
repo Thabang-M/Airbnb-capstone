@@ -1,0 +1,49 @@
+.giftcards-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 40px;
+  }
+  
+  .giftcards-text {
+    flex: 1;
+  }
+  
+  .giftcards-text h2 {
+    font-size: 2.5rem;
+    color: #333;
+    margin: 0;
+  }
+  
+  .giftcards-container {
+    flex: 1;
+    position: relative;
+    height: 250px;
+  }
+  
+  .gift-card {
+    width: 300px;
+    height: 180px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    background-size: cover;
+    background-position: center;
+    position: absolute;
+  }
+  
+  .card1 {
+    background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80');
+    transform: rotate(-5deg);
+    z-index: 2;
+    top: 20px;
+    left: 40px;
+  }
+  
+  .card2 {
+    background-image: url('https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=400&q=80');
+    transform: rotate(5deg);
+    z-index: 1;
+    top: 50px;
+    left: 80px;
+  }

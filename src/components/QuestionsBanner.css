@@ -1,0 +1,42 @@
+/* src/styles/QuestionsBanner.css */
+.questions-banner {
+    background-image: url('https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1600&q=80');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-align: center;
+    padding: 60px;
+    margin: 40px auto;
+    border-radius: 10px;
+    position: relative;
+  }
+  
+  .banner-content {
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .questions-banner h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+  }
+  
+  .ask-button {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    background-color: #ff5a5f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .ask-button:hover {
+    background-color: #e04c4f;
+  }
+  

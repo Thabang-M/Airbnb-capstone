@@ -1,0 +1,55 @@
+/* src/styles/Copyrights.css */
+.copyrights-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    font-size: 0.9rem;
+    background-color: #f8f8f8;
+    border-top: 1px solid #eaeaea;
+  }
+  
+  .copyrights-left {
+    color: #555;
+  }
+  
+  .copyrights-left a {
+    color: #555;
+    text-decoration: none;
+    margin-left: 10px;
+  }
+  
+  .copyrights-left a:hover {
+    text-decoration: underline;
+  }
+  
+  .copyrights-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .language-currency {
+    display: flex;
+    align-items: center;
+  }
+  
+  .icon-globe {
+    margin-right: 8px;
+  }
+  
+  .social-media-icons {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .social-icon {
+    color: #555;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+  }
+  
+  .social-icon:hover {
+    color: #000;
+  }
+  

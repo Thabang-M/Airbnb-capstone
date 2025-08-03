@@ -1,70 +1,191 @@
-# Getting Started with Create React App
+# 🏠 Airbnb Capstone Project
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-stack Airbnb clone built with React, Node.js, and MongoDB. This project demonstrates a complete vacation rental platform with user authentication, property listings, booking management, and responsive design.
 
-## Available Scripts
+## ✨ Features
 
-In the project directory, you can run:
+### 🏡 Property Management
+- Browse properties by location and filters
+- Detailed property listings with images and amenities
+- Host dashboard for property management
+- Create, edit, and delete property listings
 
-### `npm start`
+### 👥 User System
+- Guest and Host user roles
+- User registration and authentication
+- Profile management
+- Booking history
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 📅 Booking System
+- Real-time availability checking
+- Secure booking process
+- Reservation management
+- Booking history for guests and hosts
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 🎨 User Experience
+- Responsive design for all devices
+- Modern Material-UI components
+- Intuitive navigation
+- Search and filtering capabilities
 
-### `npm test`
+## 🛠️ Tech Stack
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Frontend
+- **React 18** - Modern React with hooks
+- **Material-UI** - Component library
+- **Redux Toolkit** - State management
+- **React Router** - Navigation
+- **React Icons** - Icon library
 
-### `npm run build`
+### Backend
+- **Node.js** - Server runtime
+- **Express.js** - Web framework
+- **MongoDB** - Database
+- **Mongoose** - ODM
+- **bcrypt** - Password hashing
+- **JWT** - Authentication
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🚀 Getting Started
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Prerequisites
+- Node.js (v16 or higher)
+- MongoDB (local or cloud)
+- npm or yarn
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Installation
 
-### `npm run eject`
+1. **Clone the repository**
+   ```bash
+   git clone <your-repo-url>
+   cd airbnb-capstone
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+2. **Install dependencies**
+   ```bash
+   # Install frontend dependencies
+   npm install
+   
+   # Install backend dependencies
+   cd backend
+   npm install
+   cd ..
+   ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+3. **Environment Setup**
+   ```bash
+   # Copy environment template
+   cp env-template.txt .env
+   
+   # Edit .env with your configuration
+   # Set MongoDB URI, JWT secret, etc.
+   ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+4. **Database Setup**
+   ```bash
+   # Create database indexes
+   cd backend
+   node scripts/createIndexes.js
+   cd ..
+   ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+5. **Start Development Servers**
+   ```bash
+   # Start backend server (port 5002)
+   cd backend
+   npm start
+   
+   # In another terminal, start frontend (port 3000)
+   npm start
+   ```
 
-## Learn More
+6. **Access the Application**
+   - Frontend: http://localhost:3000
+   - Backend API: http://localhost:5002
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 📁 Project Structure
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+airbnb-capstone/
+├── src/                    # React frontend
+│   ├── components/         # Reusable components
+│   ├── pages/             # Page components
+│   ├── redux/             # State management
+│   └── config.js          # Configuration
+├── backend/               # Node.js backend
+│   ├── db/               # Database models & connection
+│   ├── scripts/          # Database scripts
+│   └── server.js         # Express server
+├── public/               # Static assets
+└── docs/                 # Documentation
+```
 
-### Code Splitting
+## 🔧 Available Scripts
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- `npm start` - Start development server
+- `npm run build` - Build for production
+- `npm test` - Run tests
+- `npm run deploy-test` - Run deployment readiness tests
 
-### Analyzing the Bundle Size
+## 🌐 API Endpoints
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Authentication
+- `POST /api/auth/register` - User registration
+- `POST /api/auth/login` - User login
+- `GET /api/auth/logout` - User logout
 
-### Making a Progressive Web App
+### Listings
+- `GET /api/listings` - Get all listings
+- `GET /api/listings/:id` - Get specific listing
+- `POST /api/listings` - Create listing (host only)
+- `PUT /api/listings/:id` - Update listing (host only)
+- `DELETE /api/listings/:id` - Delete listing (host only)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Bookings
+- `POST /api/bookings` - Create booking
+- `GET /api/bookings` - Get user bookings
+- `PUT /api/bookings/:id` - Update booking
 
-### Advanced Configuration
+## 🔒 Security Features
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- JWT-based authentication
+- Password hashing with bcrypt
+- CORS protection
+- Input validation
+- Role-based access control
 
-### Deployment
+## 📱 Responsive Design
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+The application is fully responsive and works on:
+- Desktop computers
+- Tablets
+- Mobile phones
 
-### `npm run build` fails to minify
+## 🚀 Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This project is ready for deployment to platforms like:
+- Heroku
+- Vercel (frontend)
+- Railway
+- DigitalOcean
+
+See `deployment-checklist.md` for detailed deployment instructions.
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## 📄 License
+
+This project is for educational purposes as part of a capstone project.
+
+## 👨‍💻 Author
+
+Built as a capstone project to demonstrate full-stack development skills.
+
+---
+
+**Note:** This is a demonstration project and should not be used for production without additional security measures and testing.

@@ -1,0 +1,40 @@
+.inspiration-section {
+    padding: 20px;
+    background-color: #fff;
+    text-align: center;
+  }
+  
+  .inspiration-section h2 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .tiles-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .tile {
+    background: linear-gradient(135deg, #ff5f5f, #ff9999);
+    border-radius: 10px;
+    width: 18%;
+    padding: 15px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .tile-image img {
+    width: 100%;
+    border-radius: 10px 10px 0 0;
+  }
+  
+  .tile-description {
+    padding-top: 10px;
+    font-size: 1rem;
+    text-align: center;
+  }
