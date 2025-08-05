@@ -19,10 +19,7 @@ const Navbar = () => {
   const locationRef = useRef(null);
   
   // Get locations from Redux store
-  const { locations, loading: loadingLocations, lastUpdated, error } = useSelector(state => state.locations);
-  
-  // Debug logging
-  console.log('Navbar - Redux state:', { locations, loadingLocations, lastUpdated, error });
+  const { locations, loading: loadingLocations, lastUpdated } = useSelector(state => state.locations);
 
   useEffect(() => {
     // Fetch locations on component mount

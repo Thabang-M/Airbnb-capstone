@@ -8,21 +8,15 @@ export const fetchCities = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const apiUrl = getApiUrl('api/cities');
-      console.log('Fetching cities from:', apiUrl);
       const response = await fetch(apiUrl);
-      console.log('Cities response status:', response.status);
       if (!response.ok) {
-        console.error('Cities fetch failed:', response.status, response.statusText);
         return rejectWithValue(`HTTP error! status: ${response.status}`);
       }
       const cities = await response.json();
-      console.log('Cities data received:', cities);
       // Transform the cities array to match the expected format
       const locations = ['All locations', ...cities.map(city => `${city.city}, ${city.country}`)];
-      console.log('Transformed locations:', locations);
       return locations;
     } catch (error) {
-      console.error('Cities fetch error:', error);
       return rejectWithValue(error.message);
     }
   }
