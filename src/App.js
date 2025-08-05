@@ -1,7 +1,5 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import store from './redux/store';
 import Copyrights from './components/Copyrights';
 import Footer from './components/Footer';
 import Navbar from './components/Navbar';
@@ -32,9 +30,8 @@ function ProtectedRoute({ children, requiredRole }) {
 
 function App() {
   return (
-    <Provider store={store}>
-      <Router>
-        <div className="App">
+    <Router>
+      <div className="App">
           <Navbar />
           {/* <Header /> */}
 
@@ -68,7 +65,6 @@ function App() {
           <Copyrights />
         </div>
       </Router>
-    </Provider>
   );
 }
 
