@@ -18,6 +18,7 @@ import GuestReservations from './pages/GuestReservations';
 import HostListings from './pages/HostListings';
 import CreateListing from './pages/CreateListing';
 import EditListing from './pages/EditListing';
+import DebugLocations from './components/DebugLocations';
 import { useAuth } from './AuthContext';
 
 function ProtectedRoute({ children, requiredRole }) {
@@ -40,6 +41,7 @@ function App() {
           <main>
             <Routes>
               <Route path="/" element={<HomePage />} />
+              <Route path="/debug" element={<DebugLocations />} />
               <Route path="/locations" element={<Locations />} />
               <Route path="/locations/:id" element={<LocationDetails />} />
               <Route path="/login" element={<Login />} />
