@@ -31,7 +31,7 @@ const HostReservations = () => {
     if (!window.confirm('Are you sure you want to delete this reservation?')) return;
     
     try {
-      const response = await fetch(`getApiUrl('api/reservations/${reservationId}`, {
+      const response = await fetch(getApiUrl(`api/reservations/${reservationId}`), {
         method: 'DELETE',
         credentials: 'include'
       });

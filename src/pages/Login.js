@@ -17,13 +17,17 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     try {
+      console.log('Login: Attempting login for role:', role);
       const res = await fetch(getApiUrl('api/auth/login'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({ email, password, role })
       });
+      console.log('Login: Response status:', res.status);
+      console.log('Login: Response headers:', res.headers);
       const data = await res.json();
+      console.log('Login: Response data:', data);
       if (!res.ok) {
         showError(data.error || 'Login failed');
         return;
@@ -38,6 +42,7 @@ const Login = () => {
         navigate('/locations');
       }
     } catch (err) {
+      console.error('Login error:', err);
       showError('Login failed. Please try again.');
     } finally {
       setLoading(false);

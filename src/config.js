@@ -3,7 +3,7 @@
 
 const config = {
   // API Configuration
-  API_BASE_URL: process.env.REACT_APP_API_URL || 'http://localhost:5002',
+  API_BASE_URL: process.env.REACT_APP_API_URL || 'https://airbnb-capstone-production.up.railway.app',
   
   // Environment
   NODE_ENV: process.env.NODE_ENV || 'development',

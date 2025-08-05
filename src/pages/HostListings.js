@@ -38,7 +38,7 @@ const HostListings = () => {
     if (!window.confirm('Are you sure you want to delete this listing?')) return;
     
     try {
-      const response = await fetch(`getApiUrl('api/listings/${listingId}`, {
+      const response = await fetch(getApiUrl(`api/listings/${listingId}`), {
         method: 'DELETE',
         credentials: 'include'
       });

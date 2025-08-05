@@ -44,7 +44,7 @@ const EditListing = () => {
     async function fetchListing() {
       setLoading(true);
       try {
-        const res = await fetch(`getApiUrl('api/listings/${id}`);
+        const res = await fetch(getApiUrl(`api/listings/${id}`));
         if (!res.ok) throw new Error('Failed to fetch listing');
         const data = await res.json();
         setFormData({
@@ -175,7 +175,7 @@ const EditListing = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch(`getApiUrl('api/listings/${id}`, {
+      const response = await fetch(getApiUrl(`api/listings/${id}`), {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

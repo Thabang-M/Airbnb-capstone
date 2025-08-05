@@ -15,18 +15,23 @@ export const AuthProvider = ({ children }) => {
     async function fetchSession() {
       setLoading(true);
       try {
+        console.log('AuthContext: Checking session...');
         const res = await fetch(getApiUrl('api/auth/session'), {
           credentials: 'include',
         });
+        console.log('AuthContext: Session response status:', res.status);
         if (res.ok) {
           const data = await res.json();
+          console.log('AuthContext: Session data:', data);
           setUser(data.user);
           setRole(data.user?.role || null);
         } else {
+          console.log('AuthContext: Session check failed');
           setUser(null);
           setRole(null);
         }
-      } catch {
+      } catch (err) {
+        console.error('AuthContext: Session check error:', err);
         setUser(null);
         setRole(null);
       } finally {
