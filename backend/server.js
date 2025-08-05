@@ -547,7 +547,8 @@ server.post('/api/auth/login', async (req, res) => {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
       sameSite: isProduction ? 'none' : 'lax',
-      secure: isProduction
+      secure: isProduction,
+      path: '/'
     };
     
     res.cookie('userId', user._id.toString(), cookieOptions);
@@ -591,7 +592,8 @@ server.post('/api/auth/logout', (req, res) => {
   const cookieOptions = {
     httpOnly: true,
     sameSite: isProduction ? 'none' : 'lax',
-    secure: isProduction
+    secure: isProduction,
+    path: '/'
   };
   
   res.clearCookie('userId', cookieOptions);
