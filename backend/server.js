@@ -14,7 +14,24 @@ const server = express();
 
 // CORS middleware
 server.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+  const allowedOrigins = [
+    'http://localhost:3000',
+    'https://localhost:3000',
+    // Netlify domains
+    'https://*.netlify.app',
+    'https://abnb-capstone.netlify.app'
+  ];
+  
+  const origin = req.headers.origin;
+  if (origin && allowedOrigins.some(allowedOrigin => {
+    if (allowedOrigin.includes('*')) {
+      return origin.includes(allowedOrigin.replace('*', ''));
+    }
+    return allowedOrigin === origin;
+  })) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
+  
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
   res.header('Access-Control-Allow-Credentials', 'true');
@@ -34,23 +51,34 @@ server.use(cookieParser());
 // Authentication middleware
 const authenticateHost = async (req, res, next) => {
   try {
+    console.log('Authenticating host request...');
+    console.log('Cookies:', req.cookies);
+    console.log('Headers:', req.headers);
+    
     const userId = req.cookies.userId;
     if (!userId) {
+      console.log('No userId cookie found');
       return res.status(401).json({ error: 'Not authenticated' });
     }
     
+    console.log('Found userId:', userId);
     const user = await User.findById(userId);
     if (!user) {
+      console.log('User not found in database');
       return res.status(401).json({ error: 'User not found' });
     }
     
+    console.log('User found:', { email: user.email, role: user.role });
     if (user.role !== 'host') {
+      console.log('User is not a host');
       return res.status(403).json({ error: 'Host access required' });
     }
     
     req.user = user;
+    console.log('Authentication successful for host:', user.email);
     next();
   } catch (err) {
+    console.error('Authentication error:', err);
     res.status(500).json({ error: 'Authentication failed' });
   }
 };
@@ -58,6 +86,12 @@ const authenticateHost = async (req, res, next) => {
 // --- MongoDB-powered listing endpoints ---
 server.get('/api/listings', async (req, res) => {
   try {
+    // Quick health check response for Railway
+    const userAgent = req.headers['user-agent'] || '';
+    if (userAgent.includes('Railway') || req.query.health === 'true') {
+      return res.status(200).json({ status: 'OK', message: 'Server is healthy' });
+    }
+    
     const { city, country, page = 1, limit = 20 } = req.query;
     let filter = {};
     if (city) filter['address.city'] = city;
@@ -508,8 +542,16 @@ server.post('/api/auth/login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials.' });
     }
     // Set cookie for session (simple userId cookie for now)
-    res.cookie('userId', user._id.toString(), { httpOnly: true, sameSite: 'lax' });
-    res.cookie('role', user.role, { httpOnly: true, sameSite: 'lax' });
+    const isProduction = process.env.NODE_ENV === 'production';
+    const cookieOptions = {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      sameSite: isProduction ? 'none' : 'lax',
+      secure: isProduction
+    };
+    
+    res.cookie('userId', user._id.toString(), cookieOptions);
+    res.cookie('role', user.role, cookieOptions);
     res.json({ message: 'Login successful', user: { email: user.email, role: user.role, firstName: user.firstName, lastName: user.lastName } });
   } catch (err) {
     res.status(500).json({ error: 'Login failed.' });
@@ -519,24 +561,51 @@ server.post('/api/auth/login', async (req, res) => {
 // Session endpoint
 server.get('/api/auth/session', async (req, res) => {
   try {
+    console.log('Session check - Cookies:', req.cookies);
+    console.log('Session check - Headers:', req.headers);
+    
     const userId = req.cookies.userId;
-    if (!userId) return res.status(401).json({ error: 'Not logged in' });
+    if (!userId) {
+      console.log('Session check - No userId cookie found');
+      return res.status(401).json({ error: 'Not logged in' });
+    }
+    
+    console.log('Session check - Found userId:', userId);
     const user = await User.findById(userId).select('-password');
-    if (!user) return res.status(401).json({ error: 'User not found' });
+    if (!user) {
+      console.log('Session check - User not found in database');
+      return res.status(401).json({ error: 'User not found' });
+    }
+    
+    console.log('Session check - User found:', { email: user.email, role: user.role });
     res.json({ user });
-  } catch {
+  } catch (err) {
+    console.error('Session check error:', err);
     res.status(500).json({ error: 'Session check failed' });
   }
 });
 
 // Logout endpoint
 server.post('/api/auth/logout', (req, res) => {
-  res.clearCookie('userId');
-  res.clearCookie('role');
+  const isProduction = process.env.NODE_ENV === 'production';
+  const cookieOptions = {
+    httpOnly: true,
+    sameSite: isProduction ? 'none' : 'lax',
+    secure: isProduction
+  };
+  
+  res.clearCookie('userId', cookieOptions);
+  res.clearCookie('role', cookieOptions);
   res.json({ message: 'Logged out' });
 });
 
 const PORT = process.env.PORT || 5002;
 server.listen(PORT, () => {
-  // Server started successfully
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`📊 Health check available at: http://localhost:${PORT}/api/listings`);
+});
+
+// Simple health check endpoint
+server.get('/health', (req, res) => {
+  res.status(200).json({ status: 'OK', message: 'Server is running' });
 });
