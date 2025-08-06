@@ -19,7 +19,8 @@ server.use((req, res, next) => {
     'https://localhost:3000',
     // Netlify domains
     'https://*.netlify.app',
-    'https://radiant-beijinho-f00df5.netlify.app'
+    'https://radiant-beijinho-f00df5.netlify.app',
+    'https://ziao-capstone.netlify.app'
   ];
   
   const origin = req.headers.origin;
