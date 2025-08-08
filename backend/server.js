@@ -43,11 +43,13 @@ const initializeServer = async () => {
       res.header('Access-Control-Allow-Credentials', 'true');
       res.header('Access-Control-Expose-Headers', 'Set-Cookie');
       
+      // Handle preflight requests
       if (req.method === 'OPTIONS') {
-        res.sendStatus(200);
-      } else {
-        next();
+        res.status(200).end();
+        return;
       }
+      
+      next();
     });
 
     // Increase JSON body parser limit to handle large payloads (like base64 images)
@@ -578,10 +580,9 @@ const initializeServer = async () => {
         const cookieOptions = {
           httpOnly: true,
           maxAge: 24 * 60 * 60 * 1000, // 24 hours
-          sameSite: isProduction ? 'none' : 'lax',
+          sameSite: 'lax', // Use 'lax' for better cross-origin compatibility
           secure: isProduction,
-          path: '/',
-          domain: isProduction ? undefined : undefined // Let the browser handle domain
+          path: '/'
         };
         
         // Set cookies with proper options
@@ -589,6 +590,7 @@ const initializeServer = async () => {
         res.cookie('role', user.role, cookieOptions);
         
         console.log('Login successful - Cookies set for user:', user.email);
+        console.log('Cookie options:', cookieOptions);
         res.json({ message: 'Login successful', user: { email: user.email, role: user.role, firstName: user.firstName, lastName: user.lastName } });
       } catch (err) {
         console.error('Login error:', err);
@@ -628,10 +630,9 @@ const initializeServer = async () => {
       const isProduction = process.env.NODE_ENV === 'production';
       const cookieOptions = {
         httpOnly: true,
-        sameSite: isProduction ? 'none' : 'lax',
+        sameSite: 'lax',
         secure: isProduction,
-        path: '/',
-        domain: isProduction ? undefined : undefined
+        path: '/'
       };
       
       res.clearCookie('userId', cookieOptions);

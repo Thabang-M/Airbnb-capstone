@@ -14,14 +14,25 @@ const GuestReservations = () => {
 
   const fetchReservations = async () => {
     try {
+      console.log('🔍 Fetching reservations...');
       const response = await fetch(getApiUrl('api/reservations/guest'), {
         credentials: 'include'
       });
-      if (!response.ok) throw new Error('Failed to fetch reservations');
+      console.log('📊 Response status:', response.status);
+      console.log('📋 Response headers:', response.headers);
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('❌ Failed to fetch reservations:', errorData);
+        throw new Error(errorData.error || 'Failed to fetch reservations');
+      }
+      
       const data = await response.json();
+      console.log('✅ Reservations data:', data);
       setReservations(data);
     } catch (err) {
-      setError('Failed to load reservations');
+      console.error('❌ Error fetching reservations:', err);
+      setError('Failed to load reservations: ' + err.message);
     } finally {
       setLoading(false);
     }
