@@ -581,7 +581,7 @@ const initializeServer = async () => {
           httpOnly: true,
           maxAge: 24 * 60 * 60 * 1000, // 24 hours
           sameSite: 'lax', // Use 'lax' for better cross-origin compatibility
-          secure: isProduction,
+          secure: isProduction, // Only use secure in production (HTTPS)
           path: '/'
         };
         
@@ -591,6 +591,7 @@ const initializeServer = async () => {
         
         console.log('Login successful - Cookies set for user:', user.email);
         console.log('Cookie options:', cookieOptions);
+        console.log('Request origin:', req.headers.origin);
         res.json({ message: 'Login successful', user: { email: user.email, role: user.role, firstName: user.firstName, lastName: user.lastName } });
       } catch (err) {
         console.error('Login error:', err);
@@ -601,26 +602,27 @@ const initializeServer = async () => {
     // Session endpoint
     server.get('/api/auth/session', async (req, res) => {
       try {
-        console.log('Session check - Cookies:', req.cookies);
-        console.log('Session check - Headers:', req.headers);
+        console.log('🔍 Session check - Cookies:', req.cookies);
+        console.log('🔍 Session check - Headers:', req.headers);
+        console.log('🔍 Session check - Origin:', req.headers.origin);
         
         const userId = req.cookies.userId;
         if (!userId) {
-          console.log('Session check - No userId cookie found');
+          console.log('❌ Session check - No userId cookie found');
           return res.status(401).json({ error: 'Not logged in' });
         }
         
-        console.log('Session check - Found userId:', userId);
+        console.log('✅ Session check - Found userId:', userId);
         const user = await User.findById(userId).select('-password');
         if (!user) {
-          console.log('Session check - User not found in database');
+          console.log('❌ Session check - User not found in database');
           return res.status(401).json({ error: 'User not found' });
         }
         
-        console.log('Session check - User found:', { email: user.email, role: user.role });
+        console.log('✅ Session check - User found:', { email: user.email, role: user.role });
         res.json({ user });
       } catch (err) {
-        console.error('Session check error:', err);
+        console.error('❌ Session check error:', err);
         res.status(500).json({ error: 'Session check failed' });
       }
     });
