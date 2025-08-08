@@ -20,8 +20,7 @@ server.use((req, res, next) => {
     // Netlify domains
     'https://*.netlify.app',
     'https://radiant-beijinho-f00df5.netlify.app',
-    'https://ziao-capstone.netlify.app',
-    'https://zaio-capstone.netlify.app'
+    'https://ziao-capstone.netlify.app'
   ];
   
   const origin = req.headers.origin;
