@@ -29,6 +29,8 @@ const initializeServer = async () => {
       ];
       
       const origin = req.headers.origin;
+      console.log('🌐 CORS check - Origin:', origin);
+      
       if (origin && allowedOrigins.some(allowedOrigin => {
         if (allowedOrigin.includes('*')) {
           return origin.includes(allowedOrigin.replace('*', ''));
@@ -36,6 +38,9 @@ const initializeServer = async () => {
         return allowedOrigin === origin;
       })) {
         res.header('Access-Control-Allow-Origin', origin);
+        console.log('✅ CORS - Allowed origin:', origin);
+      } else {
+        console.log('❌ CORS - Origin not allowed:', origin);
       }
       
       res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -45,6 +50,7 @@ const initializeServer = async () => {
       
       // Handle preflight requests
       if (req.method === 'OPTIONS') {
+        console.log('🔄 CORS - Handling preflight request');
         res.status(200).end();
         return;
       }
@@ -577,10 +583,15 @@ const initializeServer = async () => {
         
         // Set cookie for session with improved cross-domain compatibility
         const isProduction = process.env.NODE_ENV === 'production';
+        console.log('🔧 Environment check:', {
+          NODE_ENV: process.env.NODE_ENV,
+          isProduction: isProduction
+        });
+        
         const cookieOptions = {
           httpOnly: true,
           maxAge: 24 * 60 * 60 * 1000, // 24 hours
-          sameSite: 'lax', // Use 'lax' for better cross-origin compatibility
+          sameSite: isProduction ? 'none' : 'lax', // Use 'none' for cross-origin in production
           secure: isProduction, // Only use secure in production (HTTPS)
           path: '/'
         };
@@ -592,6 +603,7 @@ const initializeServer = async () => {
         console.log('Login successful - Cookies set for user:', user.email);
         console.log('Cookie options:', cookieOptions);
         console.log('Request origin:', req.headers.origin);
+        console.log('Is production:', isProduction);
         res.json({ message: 'Login successful', user: { email: user.email, role: user.role, firstName: user.firstName, lastName: user.lastName } });
       } catch (err) {
         console.error('Login error:', err);
@@ -632,7 +644,7 @@ const initializeServer = async () => {
       const isProduction = process.env.NODE_ENV === 'production';
       const cookieOptions = {
         httpOnly: true,
-        sameSite: 'lax',
+        sameSite: isProduction ? 'none' : 'lax',
         secure: isProduction,
         path: '/'
       };
