@@ -41,6 +41,7 @@ const initializeServer = async () => {
       res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
       res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
       res.header('Access-Control-Allow-Credentials', 'true');
+      res.header('Access-Control-Expose-Headers', 'Set-Cookie');
       
       if (req.method === 'OPTIONS') {
         res.sendStatus(200);
@@ -303,23 +304,34 @@ const initializeServer = async () => {
     // Authentication middleware for guests
     const authenticateGuest = async (req, res, next) => {
       try {
+        console.log('🔐 Authenticating guest request...');
+        console.log('🍪 Cookies:', req.cookies);
+        console.log('📋 Headers:', req.headers);
+        
         const userId = req.cookies.userId;
         if (!userId) {
+          console.log('❌ No userId cookie found');
           return res.status(401).json({ error: 'Not authenticated' });
         }
         
+        console.log('✅ Found userId:', userId);
         const user = await User.findById(userId);
         if (!user) {
+          console.log('❌ User not found in database');
           return res.status(401).json({ error: 'User not found' });
         }
         
+        console.log('✅ User found:', { email: user.email, role: user.role });
         if (user.role !== 'guest') {
+          console.log('❌ User is not a guest, role:', user.role);
           return res.status(403).json({ error: 'Guest access required' });
         }
         
         req.user = user;
+        console.log('✅ Authentication successful for guest:', user.email);
         next();
       } catch (err) {
+        console.error('❌ Authentication error:', err);
         res.status(500).json({ error: 'Authentication failed' });
       }
     };
@@ -400,11 +412,14 @@ const initializeServer = async () => {
     // Booking endpoint
     server.post('/api/bookings', authenticateGuest, async (req, res) => {
       try {
+        console.log('📅 Creating booking for user:', req.user.email);
+        console.log('📋 Booking data:', req.body);
         
         const { listingId, checkIn, checkOut, numberOfGuests, totalPrice } = req.body;
 
         // Validate required fields
         if (!listingId || !checkIn || !checkOut || !numberOfGuests) {
+          console.log('❌ Missing required fields:', { listingId, checkIn, checkOut, numberOfGuests });
           return res.status(400).json({ error: 'Missing required fields' });
         }
 
@@ -415,21 +430,27 @@ const initializeServer = async () => {
         today.setHours(0, 0, 0, 0);
 
         if (checkInDate <= today) {
+          console.log('❌ Check-in date must be in the future');
           return res.status(400).json({ error: 'Check-in date must be in the future' });
         }
 
         if (checkOutDate <= checkInDate) {
+          console.log('❌ Check-out date must be after check-in date');
           return res.status(400).json({ error: 'Check-out date must be after check-in date' });
         }
 
         // Get listing details
         const listing = await Listing.findById(listingId);
         if (!listing) {
+          console.log('❌ Listing not found:', listingId);
           return res.status(404).json({ error: 'Listing not found' });
         }
 
+        console.log('✅ Listing found:', listing.title);
+
         // Check guest limit
         if (numberOfGuests > listing.propertyDetails.maxGuests) {
+          console.log('❌ Too many guests:', numberOfGuests, '>', listing.propertyDetails.maxGuests);
           return res.status(400).json({ error: `Maximum ${listing.propertyDetails.maxGuests} guests allowed` });
         }
 
@@ -446,8 +467,11 @@ const initializeServer = async () => {
         });
 
         if (existingBookings.length > 0) {
+          console.log('❌ Property not available for selected dates');
           return res.status(400).json({ error: 'Property is not available for the selected dates' });
         }
+
+        console.log('✅ Property is available for selected dates');
 
         // Create booking
         const bookingData = {
@@ -458,7 +482,7 @@ const initializeServer = async () => {
           checkOut,
           numberOfGuests,
           totalPrice,
-                  currency: 'ZAR',
+          currency: 'ZAR',
           status: 'pending',
           bookingDate: new Date().toISOString(),
           paymentStatus: 'pending',
@@ -479,11 +503,12 @@ const initializeServer = async () => {
         }
 
         const booking = new Booking(bookingData);
-
         await booking.save();
+        
+        console.log('✅ Booking created successfully:', booking._id);
         res.status(201).json({ message: 'Booking created successfully', booking });
       } catch (err) {
-        console.error('Booking creation error:', err);
+        console.error('❌ Booking creation error:', err);
         console.error('Error details:', err.message);
         res.status(500).json({ error: 'Failed to create booking: ' + err.message });
       }
@@ -547,20 +572,26 @@ const initializeServer = async () => {
         if (!isMatch) {
           return res.status(401).json({ error: 'Invalid credentials.' });
         }
-        // Set cookie for session (simple userId cookie for now)
+        
+        // Set cookie for session with improved cross-domain compatibility
         const isProduction = process.env.NODE_ENV === 'production';
         const cookieOptions = {
           httpOnly: true,
           maxAge: 24 * 60 * 60 * 1000, // 24 hours
           sameSite: isProduction ? 'none' : 'lax',
           secure: isProduction,
-          path: '/'
+          path: '/',
+          domain: isProduction ? undefined : undefined // Let the browser handle domain
         };
         
+        // Set cookies with proper options
         res.cookie('userId', user._id.toString(), cookieOptions);
         res.cookie('role', user.role, cookieOptions);
+        
+        console.log('Login successful - Cookies set for user:', user.email);
         res.json({ message: 'Login successful', user: { email: user.email, role: user.role, firstName: user.firstName, lastName: user.lastName } });
       } catch (err) {
+        console.error('Login error:', err);
         res.status(500).json({ error: 'Login failed.' });
       }
     });
@@ -599,7 +630,8 @@ const initializeServer = async () => {
         httpOnly: true,
         sameSite: isProduction ? 'none' : 'lax',
         secure: isProduction,
-        path: '/'
+        path: '/',
+        domain: isProduction ? undefined : undefined
       };
       
       res.clearCookie('userId', cookieOptions);
