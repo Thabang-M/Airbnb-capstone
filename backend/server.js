@@ -582,9 +582,14 @@ const initializeServer = async () => {
         }
         
         // Set cookie for session with improved cross-domain compatibility
-        const isProduction = process.env.NODE_ENV === 'production';
+        // Check if we're in production by looking at the hostname or environment
+        const isProduction = process.env.NODE_ENV === 'production' || 
+                           req.headers.host?.includes('railway') || 
+                           req.headers.host?.includes('up.railway.app');
+        
         console.log('🔧 Environment check:', {
           NODE_ENV: process.env.NODE_ENV,
+          host: req.headers.host,
           isProduction: isProduction
         });
         
@@ -641,7 +646,9 @@ const initializeServer = async () => {
 
     // Logout endpoint
     server.post('/api/auth/logout', (req, res) => {
-      const isProduction = process.env.NODE_ENV === 'production';
+      const isProduction = process.env.NODE_ENV === 'production' || 
+                          req.headers.host?.includes('railway') || 
+                          req.headers.host?.includes('up.railway.app');
       const cookieOptions = {
         httpOnly: true,
         sameSite: isProduction ? 'none' : 'lax',
