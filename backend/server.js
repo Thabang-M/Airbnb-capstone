@@ -297,23 +297,33 @@ server.delete('/api/listings/:id', authenticateHost, async (req, res) => {
 // Authentication middleware for guests
 const authenticateGuest = async (req, res, next) => {
   try {
+    console.log('🔍 Guest authentication - Cookies:', req.cookies);
+    console.log('🔍 Guest authentication - Headers:', req.headers);
+    
     const userId = req.cookies.userId;
     if (!userId) {
+      console.log('❌ Guest auth failed - No userId cookie found');
       return res.status(401).json({ error: 'Not authenticated' });
     }
     
+    console.log('🔍 Guest authentication - Found userId:', userId);
     const user = await User.findById(userId);
     if (!user) {
+      console.log('❌ Guest auth failed - User not found in database');
       return res.status(401).json({ error: 'User not found' });
     }
     
+    console.log('🔍 Guest authentication - User found:', { email: user.email, role: user.role });
     if (user.role !== 'guest') {
+      console.log('❌ Guest auth failed - User role is not guest:', user.role);
       return res.status(403).json({ error: 'Guest access required' });
     }
     
     req.user = user;
+    console.log('✅ Guest authentication successful for:', user.email);
     next();
   } catch (err) {
+    console.error('❌ Guest authentication error:', err);
     res.status(500).json({ error: 'Authentication failed' });
   }
 };
@@ -562,26 +572,27 @@ server.post('/api/auth/login', async (req, res) => {
 // Session endpoint
 server.get('/api/auth/session', async (req, res) => {
   try {
-    console.log('Session check - Cookies:', req.cookies);
-    console.log('Session check - Headers:', req.headers);
+    console.log('🔍 Session check - Cookies:', req.cookies);
+    console.log('🔍 Session check - Headers:', req.headers);
+    console.log('🔍 Session check - Origin:', req.headers.origin);
     
     const userId = req.cookies.userId;
     if (!userId) {
-      console.log('Session check - No userId cookie found');
+      console.log('❌ Session check - No userId cookie found');
       return res.status(401).json({ error: 'Not logged in' });
     }
     
-    console.log('Session check - Found userId:', userId);
+    console.log('🔍 Session check - Found userId:', userId);
     const user = await User.findById(userId).select('-password');
     if (!user) {
-      console.log('Session check - User not found in database');
+      console.log('❌ Session check - User not found in database');
       return res.status(401).json({ error: 'User not found' });
     }
     
-    console.log('Session check - User found:', { email: user.email, role: user.role });
+    console.log('✅ Session check - User found:', { email: user.email, role: user.role });
     res.json({ user });
   } catch (err) {
-    console.error('Session check error:', err);
+    console.error('❌ Session check error:', err);
     res.status(500).json({ error: 'Session check failed' });
   }
 });
