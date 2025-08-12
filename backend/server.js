@@ -561,6 +561,10 @@ server.post('/api/auth/login', async (req, res) => {
       path: '/'
     };
     
+    console.log('🔍 Login - NODE_ENV:', process.env.NODE_ENV);
+    console.log('🔍 Login - isProduction:', isProduction);
+    console.log('🔍 Login - Cookie options:', cookieOptions);
+    
     res.cookie('userId', user._id.toString(), cookieOptions);
     res.cookie('role', user.role, cookieOptions);
     res.json({ message: 'Login successful', user: { email: user.email, role: user.role, firstName: user.firstName, lastName: user.lastName } });
