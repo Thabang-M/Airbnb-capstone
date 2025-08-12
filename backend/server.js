@@ -543,12 +543,21 @@ server.post('/api/auth/login', async (req, res) => {
     if (!email || !password || !role) {
       return res.status(400).json({ error: 'Email, password, and role are required.' });
     }
+    console.log('🔍 Login - Searching for user with email:', email, 'and role:', role);
     const user = await User.findOne({ email, role });
+    console.log('🔍 Login - User found:', user ? { email: user.email, role: user.role, id: user._id } : 'NOT FOUND');
+    
     if (!user) {
+      console.log('❌ Login failed - User not found');
       return res.status(401).json({ error: 'Invalid credentials.' });
     }
+    
+    console.log('🔍 Login - Comparing passwords...');
     const isMatch = await bcrypt.compare(password, user.password);
+    console.log('🔍 Login - Password match:', isMatch);
+    
     if (!isMatch) {
+      console.log('❌ Login failed - Password mismatch');
       return res.status(401).json({ error: 'Invalid credentials.' });
     }
     // Set cookie for session (simple userId cookie for now)
@@ -564,8 +573,10 @@ server.post('/api/auth/login', async (req, res) => {
     console.log('🔍 Login - NODE_ENV:', process.env.NODE_ENV);
     console.log('🔍 Login - Cookie options:', cookieOptions);
     
+    console.log('🔍 Login - Setting cookies...');
     res.cookie('userId', user._id.toString(), cookieOptions);
     res.cookie('role', user.role, cookieOptions);
+    console.log('🔍 Login - Cookies set, sending response...');
     res.json({ message: 'Login successful', user: { email: user.email, role: user.role, firstName: user.firstName, lastName: user.lastName } });
   } catch (err) {
     res.status(500).json({ error: 'Login failed.' });
