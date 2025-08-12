@@ -570,7 +570,7 @@ server.post('/api/auth/login', async (req, res) => {
     // Set cookie for session (simple userId cookie for now)
     // For Railway deployment, always use production cookie settings for cross-origin compatibility
     const cookieOptions = {
-      httpOnly: true,
+      httpOnly: false, // Changed to false to allow JavaScript access for debugging
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
       sameSite: 'none', // Required for cross-origin requests
       secure: true, // Required for cross-origin requests
@@ -583,7 +583,10 @@ server.post('/api/auth/login', async (req, res) => {
     console.log('🔍 Login - Setting cookies...');
     res.cookie('userId', user._id.toString(), cookieOptions);
     res.cookie('role', user.role, cookieOptions);
-    console.log('🔍 Login - Cookies set, sending response...');
+    
+    // Log the response headers to see what cookies are being set
+    console.log('🔍 Login - Response headers after setting cookies:', res.getHeaders());
+    
     res.json({ message: 'Login successful', user: { email: user.email, role: user.role, firstName: user.firstName, lastName: user.lastName } });
   } catch (err) {
     res.status(500).json({ error: 'Login failed.' });
@@ -622,7 +625,7 @@ server.get('/api/auth/session', async (req, res) => {
 server.post('/api/auth/logout', (req, res) => {
   const isProduction = process.env.NODE_ENV === 'production';
   const cookieOptions = {
-    httpOnly: true,
+    httpOnly: false, // Changed to false to allow JavaScript access for debugging
     sameSite: 'none', // Required for cross-origin requests
     secure: true, // Required for cross-origin requests
     path: '/'
