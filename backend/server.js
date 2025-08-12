@@ -510,10 +510,14 @@ server.post('/api/auth/register', async (req, res) => {
         return res.status(400).json({ error: 'Missing required guest fields.' });
       }
     }
+    console.log('🔍 Registration - Checking for existing user with email:', email);
     const existingUser = await User.findOne({ email });
     if (existingUser) {
+      console.log('❌ Registration failed - Email already exists');
       return res.status(409).json({ error: 'Email already registered.' });
     }
+    
+    console.log('🔍 Registration - Creating new user...');
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User({
       email,
@@ -529,7 +533,10 @@ server.post('/api/auth/register', async (req, res) => {
       dateJoined: new Date().toISOString(),
       isVerified: false
     });
+    
+    console.log('🔍 Registration - Saving user to database...');
     await user.save();
+    console.log('✅ Registration successful - User saved with ID:', user._id);
     res.status(201).json({ message: 'Registration successful', user: { email: user.email, role: user.role, firstName: user.firstName, lastName: user.lastName } });
   } catch (err) {
     res.status(500).json({ error: 'Registration failed.' });
