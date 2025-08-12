@@ -552,17 +552,16 @@ server.post('/api/auth/login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials.' });
     }
     // Set cookie for session (simple userId cookie for now)
-    const isProduction = process.env.NODE_ENV === 'production';
+    // For Railway deployment, always use production cookie settings for cross-origin compatibility
     const cookieOptions = {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
-      sameSite: isProduction ? 'none' : 'lax',
-      secure: isProduction,
+      sameSite: 'none', // Required for cross-origin requests
+      secure: true, // Required for cross-origin requests
       path: '/'
     };
     
     console.log('🔍 Login - NODE_ENV:', process.env.NODE_ENV);
-    console.log('🔍 Login - isProduction:', isProduction);
     console.log('🔍 Login - Cookie options:', cookieOptions);
     
     res.cookie('userId', user._id.toString(), cookieOptions);
@@ -606,8 +605,8 @@ server.post('/api/auth/logout', (req, res) => {
   const isProduction = process.env.NODE_ENV === 'production';
   const cookieOptions = {
     httpOnly: true,
-    sameSite: isProduction ? 'none' : 'lax',
-    secure: isProduction,
+    sameSite: 'none', // Required for cross-origin requests
+    secure: true, // Required for cross-origin requests
     path: '/'
   };
   
