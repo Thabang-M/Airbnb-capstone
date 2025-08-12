@@ -7,10 +7,14 @@ const express = require('express');
 const Listing = require('./db/models/Listing');
 const bcrypt = require('bcrypt');
 const cookieParser = require('cookie-parser');
+const jwt = require('jsonwebtoken');
 const User = require('./db/models/User');
 const Booking = require('./db/models/Booking');
 
 const server = express();
+
+// JWT secret (in production, this should be an environment variable)
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
 
 // CORS middleware
 server.use((req, res, next) => {
@@ -48,37 +52,47 @@ server.use(express.json({ limit: '50mb' }));
 server.use(express.urlencoded({ limit: '50mb', extended: true }));
 server.use(cookieParser());
 
-// Authentication middleware
+// JWT Authentication middleware for hosts
 const authenticateHost = async (req, res, next) => {
   try {
-    console.log('Authenticating host request...');
-    console.log('Cookies:', req.cookies);
-    console.log('Headers:', req.headers);
+    console.log('🔍 Host JWT authentication - Headers:', req.headers);
     
-    const userId = req.cookies.userId;
-    if (!userId) {
-      console.log('No userId cookie found');
+    // Get token from Authorization header
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      console.log('❌ Host auth failed - No Bearer token found');
       return res.status(401).json({ error: 'Not authenticated' });
     }
     
-    console.log('Found userId:', userId);
-    const user = await User.findById(userId);
-    if (!user) {
-      console.log('User not found in database');
-      return res.status(401).json({ error: 'User not found' });
-    }
+    const token = authHeader.substring(7); // Remove 'Bearer ' prefix
+    console.log('🔍 Host authentication - Found token:', token.substring(0, 20) + '...');
     
-    console.log('User found:', { email: user.email, role: user.role });
-    if (user.role !== 'host') {
-      console.log('User is not a host');
-      return res.status(403).json({ error: 'Host access required' });
+    try {
+      // Verify JWT token
+      const decoded = jwt.verify(token, JWT_SECRET);
+      console.log('🔍 Host authentication - Token decoded:', { userId: decoded.userId, email: decoded.email, role: decoded.role });
+      
+      // Check if user exists and has host role
+      const user = await User.findById(decoded.userId);
+      if (!user) {
+        console.log('❌ Host auth failed - User not found in database');
+        return res.status(401).json({ error: 'User not found' });
+      }
+      
+      if (user.role !== 'host') {
+        console.log('❌ Host auth failed - User role is not host:', user.role);
+        return res.status(403).json({ error: 'Host access required' });
+      }
+      
+      req.user = user;
+      console.log('✅ Host JWT authentication successful for:', user.email);
+      next();
+    } catch (jwtError) {
+      console.log('❌ Host auth failed - JWT verification failed:', jwtError.message);
+      return res.status(401).json({ error: 'Invalid token' });
     }
-    
-    req.user = user;
-    console.log('Authentication successful for host:', user.email);
-    next();
   } catch (err) {
-    console.error('Authentication error:', err);
+    console.error('❌ Host authentication error:', err);
     res.status(500).json({ error: 'Authentication failed' });
   }
 };
@@ -294,34 +308,45 @@ server.delete('/api/listings/:id', authenticateHost, async (req, res) => {
   }
 });
 
-// Authentication middleware for guests
+// JWT Authentication middleware for guests
 const authenticateGuest = async (req, res, next) => {
   try {
-    console.log('🔍 Guest authentication - Cookies:', req.cookies);
-    console.log('🔍 Guest authentication - Headers:', req.headers);
+    console.log('🔍 Guest JWT authentication - Headers:', req.headers);
     
-    const userId = req.cookies.userId;
-    if (!userId) {
-      console.log('❌ Guest auth failed - No userId cookie found');
+    // Get token from Authorization header
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      console.log('❌ Guest auth failed - No Bearer token found');
       return res.status(401).json({ error: 'Not authenticated' });
     }
     
-    console.log('🔍 Guest authentication - Found userId:', userId);
-    const user = await User.findById(userId);
-    if (!user) {
-      console.log('❌ Guest auth failed - User not found in database');
-      return res.status(401).json({ error: 'User not found' });
-    }
+    const token = authHeader.substring(7); // Remove 'Bearer ' prefix
+    console.log('🔍 Guest authentication - Found token:', token.substring(0, 20) + '...');
     
-    console.log('🔍 Guest authentication - User found:', { email: user.email, role: user.role });
-    if (user.role !== 'guest') {
-      console.log('❌ Guest auth failed - User role is not guest:', user.role);
-      return res.status(403).json({ error: 'Guest access required' });
+    try {
+      // Verify JWT token
+      const decoded = jwt.verify(token, JWT_SECRET);
+      console.log('🔍 Guest authentication - Token decoded:', { userId: decoded.userId, email: decoded.email, role: decoded.role });
+      
+      // Check if user exists and has guest role
+      const user = await User.findById(decoded.userId);
+      if (!user) {
+        console.log('❌ Guest auth failed - User not found in database');
+        return res.status(401).json({ error: 'User not found' });
+      }
+      
+      if (user.role !== 'guest') {
+        console.log('❌ Guest auth failed - User role is not guest:', user.role);
+        return res.status(403).json({ error: 'Guest access required' });
+      }
+      
+      req.user = user;
+      console.log('✅ Guest JWT authentication successful for:', user.email);
+      next();
+    } catch (jwtError) {
+      console.log('❌ Guest auth failed - JWT verification failed:', jwtError.message);
+      return res.status(401).json({ error: 'Invalid token' });
     }
-    
-    req.user = user;
-    console.log('✅ Guest authentication successful for:', user.email);
-    next();
   } catch (err) {
     console.error('❌ Guest authentication error:', err);
     res.status(500).json({ error: 'Authentication failed' });
@@ -580,41 +605,60 @@ server.post('/api/auth/login', async (req, res) => {
     console.log('🔍 Login - NODE_ENV:', process.env.NODE_ENV);
     console.log('🔍 Login - Cookie options:', cookieOptions);
     
-    console.log('🔍 Login - Setting cookies...');
-    res.cookie('userId', user._id.toString(), cookieOptions);
-    res.cookie('role', user.role, cookieOptions);
+    console.log('🔍 Login - Creating JWT token...');
     
-    // Log the response headers to see what cookies are being set
-    console.log('🔍 Login - Response headers after setting cookies:', res.getHeaders());
+    // Create JWT token
+    const token = jwt.sign(
+      { userId: user._id.toString(), email: user.email, role: user.role },
+      JWT_SECRET,
+      { expiresIn: '24h' }
+    );
     
-    res.json({ message: 'Login successful', user: { email: user.email, role: user.role, firstName: user.firstName, lastName: user.lastName } });
+    console.log('🔍 Login - JWT token created, sending response...');
+    
+    res.json({ 
+      message: 'Login successful', 
+      user: { email: user.email, role: user.role, firstName: user.firstName, lastName: user.lastName },
+      token: token
+    });
   } catch (err) {
     res.status(500).json({ error: 'Login failed.' });
   }
 });
 
-// Session endpoint
+// JWT Session endpoint
 server.get('/api/auth/session', async (req, res) => {
   try {
-    console.log('🔍 Session check - Cookies:', req.cookies);
-    console.log('🔍 Session check - Headers:', req.headers);
-    console.log('🔍 Session check - Origin:', req.headers.origin);
+    console.log('🔍 JWT Session check - Headers:', req.headers);
     
-    const userId = req.cookies.userId;
-    if (!userId) {
-      console.log('❌ Session check - No userId cookie found');
+    // Get token from Authorization header
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      console.log('❌ Session check - No Bearer token found');
       return res.status(401).json({ error: 'Not logged in' });
     }
     
-    console.log('🔍 Session check - Found userId:', userId);
-    const user = await User.findById(userId).select('-password');
-    if (!user) {
-      console.log('❌ Session check - User not found in database');
-      return res.status(401).json({ error: 'User not found' });
-    }
+    const token = authHeader.substring(7); // Remove 'Bearer ' prefix
+    console.log('🔍 Session check - Found token:', token.substring(0, 20) + '...');
     
-    console.log('✅ Session check - User found:', { email: user.email, role: user.role });
-    res.json({ user });
+    try {
+      // Verify JWT token
+      const decoded = jwt.verify(token, JWT_SECRET);
+      console.log('🔍 Session check - Token decoded:', { userId: decoded.userId, email: decoded.email, role: decoded.role });
+      
+      // Get user from database
+      const user = await User.findById(decoded.userId).select('-password');
+      if (!user) {
+        console.log('❌ Session check - User not found in database');
+        return res.status(401).json({ error: 'User not found' });
+      }
+      
+      console.log('✅ Session check - User found:', { email: user.email, role: user.role });
+      res.json({ user });
+    } catch (jwtError) {
+      console.log('❌ Session check - JWT verification failed:', jwtError.message);
+      return res.status(401).json({ error: 'Invalid token' });
+    }
   } catch (err) {
     console.error('❌ Session check error:', err);
     res.status(500).json({ error: 'Session check failed' });
