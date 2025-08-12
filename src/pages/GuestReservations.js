@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../AuthContext';
 import { getApiUrl } from '../config';
 
 const GuestReservations = () => {
@@ -7,6 +8,7 @@ const GuestReservations = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { token } = useAuth();
 
   useEffect(() => {
     fetchReservations();
@@ -15,9 +17,19 @@ const GuestReservations = () => {
   const fetchReservations = async () => {
     try {
       console.log('🔍 Fetching reservations...');
+      
+      if (!token) {
+        setError('No authentication token found');
+        setLoading(false);
+        return;
+      }
+      
       const response = await fetch(getApiUrl('api/reservations/guest'), {
-        credentials: 'include'
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       });
+      
       console.log('📊 Response status:', response.status);
       console.log('📋 Response headers:', response.headers);
       

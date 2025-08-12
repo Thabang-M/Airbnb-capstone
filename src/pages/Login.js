@@ -33,8 +33,8 @@ const Login = () => {
         return;
       }
       showSuccess('Login successful!');
-      // Update AuthContext with user data
-      login(data.user);
+      // Update AuthContext with user data and token
+      login(data.user, data.token);
       // Redirect based on role
       if (role === 'host') {
         navigate('/admin');

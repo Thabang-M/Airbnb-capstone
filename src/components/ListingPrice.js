@@ -20,7 +20,7 @@ const ListingPrice = ({ basePrice, cleaningFee, serviceFee, taxes, discount, lis
   const [checkOut, setCheckOut] = useState('');
   const [guests, setGuests] = useState(1);
   const [loading, setLoading] = useState(false);
-  const { user, role } = useAuth();
+  const { user, role, token } = useAuth();
   const { showSuccess, showError, showWarning } = useToast();
   const navigate = useNavigate();
 
@@ -70,10 +70,17 @@ const ListingPrice = ({ basePrice, cleaningFee, serviceFee, taxes, discount, lis
         totalPrice: total
       };
       
+      if (!token) {
+        showError('No authentication token found');
+        return;
+      }
+      
       const response = await fetch(getApiUrl('api/bookings'), {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify(bookingData)
       });
 
